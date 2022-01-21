@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
 
-function App() {
+// Import files
+import Form from "./components/form";
+import TodoList from "./components/todoList";
+
+function App(props) {
+  const [inputText, setInputText] = useState([]);
+  const addTodo = (event) => {
+    setInputText([
+      ...inputText,
+      {
+        id: Math.random().toString(),
+        todo: event,
+        completed: false,
+      },
+    ]);
+  };
+  const Delete = (props) => {
+    setInputText(inputText.filter((el) => el.id !== props));
+  };
+  const CompleteTodo = (props) => {
+    setInputText(
+      inputText.map(item => {
+        if(item.id === props) {
+          return {
+            ...item, completed: !item.completed
+          }
+        } else {
+          return item;
+        }
+      })
+    )
+  };
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Javohir's Todo List!!</h1>
       </header>
+      <Form inform={addTodo} />
+      <TodoList date={inputText} delete={Delete} trueTodo={CompleteTodo} />
     </div>
   );
 }
